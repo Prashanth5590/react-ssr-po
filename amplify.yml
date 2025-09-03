@@ -1,27 +1,21 @@
 version: 1
-applications:
-  - frontend:
-      phases:
-        preBuild:
-          commands:
-            # Configure .npmrc with scope + auth
-            - echo "@ps_devops:registry=https://registry.npmjs.org/" > ~/.npmrc
-            - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-
-            # Debugging - confirm token works
-            - cat ~/.npmrc
-            - npm whoami --registry=https://registry.npmjs.org/ || echo "Auth failed"
-            - npm view @ps_devops/test-ssr-widget@1.0.3 --registry=https://registry.npmjs.org/ || echo "Package not found"
-
-            # Install deps
-            - npm ci
-        build:
-          commands:
-            - npm run build
-      artifacts:
-        baseDirectory: .next
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "@ps_devops:registry=https://registry.npmjs.org/" > ~/.npmrc
+        - echo "//registry.npmjs.org/:_authToken=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" >> ~/.npmrc
+        - cat ~/.npmrc
+        - npm whoami --registry=https://registry.npmjs.org/ || echo "Auth failed"
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
