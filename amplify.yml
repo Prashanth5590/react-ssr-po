@@ -4,7 +4,7 @@ applications:
       phases:
         preBuild:
           commands:
-            # Write .npmrc inside project root (where package.json is)
+            # Write .npmrc in the project root with static token
             - echo "@ps_devops:registry=https://registry.npmjs.org/" > .npmrc
             - echo "//registry.npmjs.org/:_authToken=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" >> .npmrc
             - cat .npmrc
