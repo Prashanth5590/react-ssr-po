@@ -7,6 +7,7 @@ applications:
             # ✅ Write .npmrc dynamically using the token from Amplify env var
             - echo "@ps_devops:registry=https://registry.npmjs.org/" > ~/.npmrc
             - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+            - npm config list
             - npm ci
         build:
           commands:
