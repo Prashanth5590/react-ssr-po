@@ -4,10 +4,16 @@ applications:
       phases:
         preBuild:
           commands:
-            # ✅ Write .npmrc dynamically using the token from Amplify env var
+            # Configure .npmrc with scope + auth
             - echo "@ps_devops:registry=https://registry.npmjs.org/" > ~/.npmrc
             - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-            - npm config list
+
+            # Debugging - confirm token works
+            - cat ~/.npmrc
+            - npm whoami --registry=https://registry.npmjs.org/ || echo "Auth failed"
+            - npm view @ps_devops/test-ssr-widget@1.0.3 --registry=https://registry.npmjs.org/ || echo "Package not found"
+
+            # Install deps
             - npm ci
         build:
           commands:
