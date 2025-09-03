@@ -1,21 +1,21 @@
 version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - echo "@ps_devops:registry=https://registry.npmjs.org/" > ~/.npmrc
-        - echo "//registry.npmjs.org/:_authToken=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" >> ~/.npmrc
-        - cat ~/.npmrc
-        - npm whoami --registry=https://registry.npmjs.org/ || echo "Auth failed"
-        - npm ci
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: .next
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
-      - .next/cache/**/*
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            # Write .npmrc inside project root (where package.json is)
+            - echo "@ps_devops:registry=https://registry.npmjs.org/" > .npmrc
+            - echo "//registry.npmjs.org/:_authToken=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" >> .npmrc
+            - cat .npmrc
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
