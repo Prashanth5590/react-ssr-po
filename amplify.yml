@@ -6,7 +6,7 @@ applications:
           commands:
             # Write .npmrc in the project root with static token
             - echo "@ps_devops:registry=https://registry.npmjs.org/" > .npmrc
-            - echo "//registry.npmjs.org/:_authToken=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" >> .npmrc
+            - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
             - cat .npmrc
             - npm ci
         build:
