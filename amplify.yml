@@ -1,21 +1,28 @@
 version: 1
-applications:
-  - frontend:
-      phases:
-        preBuild:
-          commands:
-            # Write .npmrc in the project root with static token
-            - echo "@ps_devops:registry=https://registry.npmjs.org/" > .npmrc
-            - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
-            - cat .npmrc
-            - npm ci
-        build:
-          commands:
-            - npm run build
-      artifacts:
-        baseDirectory: .next
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Use Node 18
+        - nvm install 18
+        - nvm use 18
+
+        # Auth setup for private npm packages
+        - echo "@ps_devops:registry=https://registry.npmjs.org/" > .npmrc
+        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        - cat .npmrc
+
+        # Clean install (no cached Windows binaries)
+        - npm ci
+    build:
+      commands:
+        # Rebuild lightningcss for Linux
+        - npm rebuild lightningcss --force
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
